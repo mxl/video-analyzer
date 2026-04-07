@@ -86,6 +86,8 @@ pip install .  # For regular installation
 pip install -e .  # For development installation
 # OR
 pip install ".[dev]"  # For development with test dependencies
+# OR
+pip install ".[mlx]"  # For optional mlx-whisper backend support on Apple Silicon
 ```
 
 4. Install FFmpeg:

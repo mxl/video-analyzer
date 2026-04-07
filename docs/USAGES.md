@@ -102,6 +102,7 @@ By default, the CLI loads user configuration from `config/config.json`. Passing 
     "narrative": 1024
   },
   "audio": {
+    "backend": "faster-whisper",
     "whisper_model": "medium",
     "sample_rate": 16000,
     "channels": 1,
@@ -141,6 +142,7 @@ This JSON block is an example of the configuration shape, not an authoritative l
 - `response_length.narrative`: Max length for enhanced narrative
 
 #### Audio Processing Settings
+- `audio.backend`: Whisper backend to use (`faster-whisper` or `mlx-whisper`)
 - `audio.whisper_model`: Whisper model size or local model path
 - `audio.sample_rate`: Audio sample rate in Hz
 - `audio.channels`: Number of audio channels
@@ -160,6 +162,8 @@ This JSON block is an example of the configuration shape, not an authoritative l
 ### Current Behavior Notes
 
 - `--config` expects a path to a user configuration JSON file, not a directory.
+- `audio.backend` defaults to `faster-whisper`.
+- `mlx-whisper` is intended for Apple Silicon environments and may require installing optional MLX dependencies with `pip install \".[mlx]\"`.
 
 ## Common Use Cases
 

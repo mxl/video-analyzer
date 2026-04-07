@@ -45,7 +45,7 @@ class Config:
                 self.config = json.load(f)
 
             if self.user_config.exists():
-                logger.debug(f"Loading user config from {self.user_config}")
+                logger.debug(f"Loading user config from {self.user_config.resolve()}")
                 with open(self.user_config) as f:
                     self.config = _deep_merge(self.config, json.load(f))
             else:
