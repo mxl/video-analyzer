@@ -23,6 +23,16 @@ class VideoAnalysisPipeline(dspy.Module):
         self.analyze_frame = dspy.Predict(FrameAnalysisSignature)
         self.reconstruct = dspy.Predict(ReconstructionSignature)
 
+    def _truncate_inline(self, text: str, max_chars: int = 240) -> str:
+        compact = " ".join((text or "").split())
+        if len(compact) <= max_chars:
+            return compact
+        return f"{compact[: max_chars - 3].rstrip()}..."
+
+    def _format_context_entry(self, frame_number: int, note: str) -> str:
+        summary = self._truncate_inline(note)
+        return f"Frame {frame_number}\nSummary: {summary}"
+
     def forward(
         self,
         frames: List[Dict[str, Any]],
@@ -41,16 +51,15 @@ class VideoAnalysisPipeline(dspy.Module):
         Returns:
             Prediction with 'description' (str) and 'frame_notes_list' (List[str])
         """
-        # Accumulate notes exactly as VideoAnalyzer._format_previous_analyses() does
+        # Accumulate notes in the compact context format used by VideoAnalyzer.
         accumulated_notes: List[str] = []
         frame_notes_list: List[str] = []
 
         for i, frame in enumerate(frames):
-            # Build previous_frames text matching _format_previous_analyses() format:
-            # "Frame {i}\n{note}\n" joined with "\n"
+            # Build previous_frames text matching VideoAnalyzer._format_context_entry().
             if accumulated_notes:
                 previous_frames_text = "\n".join(
-                    f"Frame {j}\n{note}\n"
+                    self._format_context_entry(j, note)
                     for j, note in enumerate(accumulated_notes)
                 )
             else:

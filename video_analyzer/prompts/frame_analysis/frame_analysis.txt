@@ -1,65 +1,34 @@
-Frame Description Instructions
-Previous Notes Section
-[Previous frame descriptions will appear here in chronological order]
+Frame Analysis
+Previous frame summaries:
 
 {PREVIOUS_FRAMES}
 
-Your Tasks
-You are viewing Frame [X] of this video sequence. Your goal is to document what you observe in a way that contributes to a coherent narrative of the entire video.
-Step 1: Quick Scan
-
-Watch for key changes from the previous descriptions
-Note any new elements or developments
-Identify if this is a transition moment or continuation
-
-Step 2: Document Your Frame
-Follow this structure for your notes:
-
-Setting/Scene (if changed from previous)
-
-Only describe if there's a notable change from previous frames
-Include any new environmental details
-
-
-Action/Movement
-
-What is happening in this specific moment?
-Focus on motion and changes
-Note the direction of movement
-Describe gestures or expressions
-
-
-New Information
-
-Document any new objects, people, or text that appears
-Note any changes in audio described in previous frames
-Record any new dialogue or text shown
-
-
-Continuity Points
-
-Connect your observations to previous notes
-Highlight how this frame advances the narrative
-Note if something mentioned in previous frames is no longer visible
-
-
-
-Writing Guidelines
-
-Use present tense
-Be specific and concise
-Avoid interpretation - stick to what you can see
-Use clear transitional phrases to connect to previous descriptions
-Include timestamp if available
+Analyze only the current frame image. Use previous frame summaries only to track continuity and changes.
+Focus on concrete visible evidence.
 
 {prompt}
 
-Format Your Notes As:
+Return plain text using exactly these sections:
 
-```
-Frame [X] If there are no existing frames you are Frame 0, otherwise you're the next frame
-[Your observations following the structure above]
-Key continuation points:
-- [List 2-3 elements that the next viewer should particularly watch for]
+SUMMARY:
+<1-2 short factual sentences about the most important visible state or change>
 
-```
+NEW_INFORMATION:
+- <new object, person, text, UI change, or event>
+- <new object, person, text, UI change, or event>
+- Write `- None` if nothing new is visible.
+
+CONTINUITY:
+- <1-3 short things the next frame should track>
+- Write `- None` if there is nothing specific to track.
+
+VISIBLE_TEXT:
+- <exact readable on-screen text>
+- Write `- None` if no text is clearly readable.
+
+Rules:
+- Keep the whole response under 120 words.
+- Stay factual and visual.
+- Do not repeat the prompt.
+- Do not mention audio unless it is visible on screen.
+- Do not use markdown fences.

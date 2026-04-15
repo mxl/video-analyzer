@@ -13,6 +13,7 @@ from .frame import VideoProcessor
 from .prompt import PromptLoader
 from .analyzer import VideoAnalyzer
 from .audio_processor import AudioProcessor, AudioTranscript
+from .whisper_backends import create_whisper_backend
 from .clients.ollama import OllamaClient
 from .clients.generic_openai_api import GenericOpenAIAPIClient
 
@@ -168,12 +169,16 @@ def main():
             # whisper_model (str): Whisper model size or path (default: "medium")
             # device (str): Device to use for audio processing (default: "cpu")
             logger.debug("Initializing audio processing...")
-            audio_processor = AudioProcessor(
-                language=config.get("audio", {}).get("language", ""),
+            whisper_backend = create_whisper_backend(
+                backend=config.get("audio", {}).get("backend", "faster-whisper"),
                 model_size_or_path=config.get("audio", {}).get(
                     "whisper_model", "medium"
                 ),
                 device=config.get("audio", {}).get("device", "cpu"),
+            )
+            audio_processor = AudioProcessor(
+                backend=whisper_backend,
+                language=config.get("audio", {}).get("language", ""),
             )
 
             logger.info("Extracting audio from video...")
@@ -213,9 +218,23 @@ def main():
                 config.get("prompt", ""),
             )
             frame_analyses = []
-            for frame in frames:
+            total_frames = len(frames)
+            for index, frame in enumerate(frames, start=1):
+                logger.info(
+                    "Analyzing frame %s/%s (frame #%s at %.2fs)...",
+                    index,
+                    total_frames,
+                    frame.number,
+                    frame.timestamp,
+                )
                 analysis = analyzer.analyze_frame(frame)
                 frame_analyses.append(analysis)
+                logger.info(
+                    "Frame %s/%s analysis: %s",
+                    index,
+                    total_frames,
+                    analysis.get("response", "")[:500].replace("\n", " "),
+                )
 
         # Stage 3: Video Reconstruction
         if args.start_stage <= 3:
